@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>EMU - Car Safety Rating</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-4 text-gray-800">NHTSA Car Safety Specification</h1>
+					
+					<p class="mb-4">Search for the car type and model to reveal the specifications for safety</a>.</p>
+
+                    <!-- Content Row -->
+                    <div class="row">
+						<div class="col-xl-12 col-lg-7">
+						<!-- Question form -->
+							<div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Search form</h6>
+                                </div>
+                                <div class="card-body">
+                                    <form class="user">
+										<div class="form-group row">
+											<div class="form-group col-lg-4">
+												<label for="role">Select the Year:</label>
+												<select class="form-select form-control" id="yearSelect" name="year">
+
+												</select>
+											</div>
+											<div class="form-group col-lg-4">
+												<label for="role">Select the Brand:</label>
+												<select class="form-select form-control" id="brandSelect" name="brand">
+
+												</select>
+											</div>
+											<div class="form-group col-lg-4">
+												<label for="role">Select the Model:</label>
+												<select class="form-select form-control" id="modelSelect" name="model">
+													<option>---</option>
+												</select>
+											</div>
+											<input type="text" hidden id="vehicleId" readonly>
+										</div>
+										<div class="form-group justify-content-center row">
+											<a class="btn btn-primary" onclick="fetchAndDisplayData()">Display Data</a>
+										</div>
+									</form>
+                                </div>
+                            </div>
+							
+							<!-- Results card -->
+							<div id="result" class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Results</h6>
+                                </div>
+                                <div class="card-body">
+                                    <form class="user">
+										<div class="form-group row p-3">
+											<div class="col-sm-6 mb-3 mb-sm-0">
+												<div class="text-left">
+													<img id="apiImage" class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;" alt="...">
+												</div>
+											</div>
+											<div class="col-sm-6 mb-3 mb-sm-0">
+												<p class="h3 mb-4 text-gray-800" id="make"></p>
+												<p class="h3 mb-4 text-gray-800" id="year"></p>
+												<p class="h3 mb-4 text-gray-800" id="model"></p>
+												<div class="col-sm-7 mb-4" id="starRating">
+													<p class="h3 text-gray-800" id="model">Overall Rating</p>
+													<i id="star1" style="color: orange;" class="fas fa-star fa-lg ratecolor"></i>
+													<i id="star2" style="color: orange;" class="fas fa-star fa-lg ratecolor"></i>
+													<i id="star3" style="color: orange;" class="fas fa-star fa-lg ratecolor"></i>
+													<i id="star4" style="color: orange;" class="fas fa-star fa-lg ratecolor"></i>
+													<i id="star5" style="color: orange;" class="fas fa-star fa-lg ratecolor"></i>
+												</div>
+											</div>
+										</div>
+										<div class="form-group justify-content-center row">
+											<div class="rating col-sm-4 mb-3 row">
+												<label for="staticEmail" class="col-sm-5 col-form-label" id="model">Overall Front Crash Rating:</label>
+												<p class="mb-4 text-gray-800 py-2" id="OverallRating"></p>
+											</div>
+											<div class="rating col-sm-4 mb-3 row">
+												<label for="staticEmail" class="col-sm-5 col-form-label" id="model">Front Crash Driver side Rating:</label>
+												<p class="mb-4 text-gray-800 py-2" id="FrontCrashDriversideRating"></p>
+											</div>
+											<div class="rating col-sm-4 mb-3 row">
+												<label for="staticEmail" class="col-sm-5 col-form-label" id="model">Front Crash Passenger side Rating:</label>
+												<p class="mb-4 text-gray-800 py-2" id="FrontCrashPassengersideRating"></p>
+											</div>
+											<div class="rating col-sm-4 mb-3 row">
+												<label for="staticEmail" class="col-sm-5 col-form-label" id="model">Overall Side Crash Rating:</label>
+												<p class="mb-4 text-gray-800 py-2" id="OverallSideCrashRating"></p>
+											</div>
+											<div class="rating col-sm-4 mb-3 row">
+												<label for="staticEmail" class="col-sm-5 col-form-label" id="model">Side Crash Driver side Rating:</label>
+												<p class="mb-4 text-gray-800 py-2" id="SideCrashDriversideRating"></p>
+											</div>
+											<div class="rating col-sm-4 mb-3 row">
+												<label for="staticEmail" class="col-sm-5 col-form-label" id="model">Side Crash Passenger side Rating:</label>
+												<p class="mb-4 text-gray-800 py-2" id="SideCrashPassengersideRating"></p>
+											</div>
+											<div class="rating col-sm-4 mb-3 row">
+												<label for="staticEmail" class="col-sm-5 col-form-label" id="model">Roll-over Rating:</label>
+												<p class="mb-4 text-gray-800 py-2" id="RolloverRating"></p>
+											</div>
+											<div class="rating col-sm-4 mb-3 row">
+												<label for="staticEmail" class="col-sm-5 col-form-label" id="model">Roll-over Rating 2:</label>
+												<p class="mb-4 text-gray-800 py-2" id="RolloverRating2"></p>
+											</div>
+											<div class="rating col-sm-4 mb-3 row">
+												<label for="staticEmail" class="col-sm-5 col-form-label" id="model">Roll-over Possibility:</label>
+												<p class="mb-4 text-gray-800 py-2" id="RolloverPossibility"></p>
+											</div>
+											<div class="rating col-sm-4 mb-3 row">
+												<label for="staticEmail" class="col-sm-5 col-form-label" id="model">Roll-over Possibility 2:</label>
+												<p class="mb-4 text-gray-800 py-2" id="RolloverPossibility2"></p>
+											</div>
+											<div class="rating col-sm-4 mb-3 row">
+												<label for="staticEmail" class="col-sm-5 col-form-label" id="model">dynamic Tip Result:</label>
+												<p class="mb-4 text-gray-800 py-2" id="dynamicTipResult"></p>
+											</div>
+											<div class="rating col-sm-4 mb-3 row">
+												<label for="staticEmail" class="col-sm-5 col-form-label" id="model">Side Pole Crash Rating:</label>
+												<p class="mb-4 text-gray-800 py-2" id="SidePoleCrashRating"></p>
+											</div>
+											<div class="rating col-sm-4 mb-3 row">
+												<label for="staticEmail" class="col-sm-5 col-form-label" id="model">NHTSA Electronic Stability Control:</label>
+												<p class="mb-4 text-gray-800 py-2" id="NHTSAElectronicStabilityControl"></p>
+											</div>
+											<div class="rating col-sm-4 mb-3 row">
+												<label for="staticEmail" class="col-sm-5 col-form-label" id="model">NHTSA Forward Collision Warning:</label>
+												<p class="mb-4 text-gray-800 py-2" id="NHTSAForwardCollisionWarning"></p>
+											</div>
+											<div class="rating col-sm-4 mb-3 row">
+												<label for="staticEmail" class="col-sm-5 col-form-label" id="model">NHTSA Lane Departure Warning:</label>
+												<p class="mb-4 text-gray-800 py-2" id="NHTSALaneDepartureWarning"></p>
+											</div>
+											<div class="rating col-sm-4 mb-3 row">
+												<label for="staticEmail" class="col-sm-5 col-form-label" id="model">Complaints Count:</label>
+												<p class="mb-4 text-gray-800 py-2" id="ComplaintsCount"></p>
+											</div>
+											<div class="rating col-sm-4 mb-3 row">
+												<label for="staticEmail" class="col-sm-5 col-form-label" id="model">Recalls Count:</label>
+												<p class="mb-4 text-gray-800 py-2" id="RecallsCount"></p>
+											</div>
+											<div class="rating col-sm-4 mb-3 row">
+												<label for="staticEmail" class="col-sm-5 col-form-label" id="model">Investigation Count:</label>
+												<p class="mb-4 text-gray-800 py-2" id="InvestigationCount"></p>
+											</div>
+										</div>
+									</form>
+                                </div>
+                            </div>
+						</div>
+					</div>
+					</div>
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<style>
+	#result {
+		display: none;
+	}
+	.ratecolor {
+	  color: orange;
+	  display: none;
+	}
+	</style>
+
+    <!-- Core plugin JavaScript -->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
+
+<script>
+    // Get references to the select elements
+    var yearSelect = document.getElementById('yearSelect');
+    var brandSelect = document.getElementById('brandSelect');
+	var modelSelect = document.getElementById('modelSelect');
+
+    // Fetch vehicle makes on page load
+    fetch('https://api.nhtsa.gov/SafetyRatings/?format=json')
+        .then(response => response.json())
+        .then(data => {
+            if (!Array.isArray(data.Results)) {
+                console.error('API response format error: Expected an array, but received:', data);
+                return;
+            }
+			
+            // Populate yearSelect with vehicle year
+            data.Results.forEach(make => {
+                var option = document.createElement('option');
+                option.value = make.ModelYear;
+                option.text = make.ModelYear;
+                yearSelect.appendChild(option);
+            });
+
+            // Trigger the change event to load models for the first make
+            yearSelect.dispatchEvent(new Event('change'));
+        })
+        .catch(error => {
+            console.error('Error fetching data from the API:', error);
+        });
+
+    // Add event listener for the "change" event on yearSelect
+    yearSelect.addEventListener('change', function() {
+        // Clear existing options in brandSelect
+        brandSelect.innerHTML = '';
+
+        // Get the selected make
+        var selectedMake = yearSelect.value;
+
+        // Fetch vehicle models based on the selected year
+        fetch(`https://api.nhtsa.gov/SafetyRatings/modelyear/${selectedMake}?format=json`)
+            .then(response => response.json())
+            .then(data => {
+                if (!Array.isArray(data.Results)) {
+                    console.error('API response format error: Expected an array, but received:', data);
+                    return;
+                }
+					// Show the element
+					brandSelect.style.display = 'block';
+                // Populate brandSelect with vehicle models
+                data.Results.forEach(brand => {
+                    var option = document.createElement('option');
+                    option.value = brand.Make;
+                    option.text = brand.Make;
+                    brandSelect.appendChild(option);
+					
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching data from the API:', error);
+            });
+    });
+	
+	    // Add event listener for the "change" event on ModelSelect
+		brandSelect.addEventListener('change', function() {
+        // Clear existing options in ModelSelect
+        modelSelect.innerHTML = '';
+
+        // Get the selected make
+        var selectedBrand = brandSelect.value;
+		var selectedMake = yearSelect.value;
+
+        // Fetch vehicle models based on the selected year
+        fetch(`https://api.nhtsa.gov/SafetyRatings/modelyear/${selectedMake}/make/${selectedBrand}?format=json`)
+            .then(response => response.json())
+            .then(data => {
+                if (!Array.isArray(data.Results)) {
+                    console.error('API response format error: Expected an array, but received:', data);
+                    return;
+                }
+					// Show the element
+					modelSelect.style.display = 'block';
+                data.Results.forEach(model => {
+                    var option = document.createElement('option');
+                    option.value = model.Model;
+                    option.text = model.Model;
+                    modelSelect.appendChild(option);
+					
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching data from the API:', error);
+            });
+    });
+</script>
+
+<script>
+	var yearSelect = document.getElementById('yearSelect');
+    var brandSelect = document.getElementById('brandSelect');
+	var modelSelect = document.getElementById('modelSelect');
+	
+	 // Add event listener for the "change" event on yearSelect
+    yearSelect.addEventListener('change', function() {
+        // Clear existing options in brandSelect
+        brandSelect.innerHTML = '';
+
+        // Get the selected make
+        var selectedMake = yearSelect.value;
+
+        // Fetch vehicle models based on the selected year
+        fetch(`https://api.nhtsa.gov/SafetyRatings/modelyear/${selectedMake}?format=json`)
+            .then(response => response.json())
+            .then(data => {
+                if (!Array.isArray(data.Results)) {
+                    console.error('API response format error: Expected an array, but received:', data);
+                    return;
+                }
+					// Show the element
+					brandSelect.style.display = 'block';
+                // Populate brandSelect with vehicle models
+                data.Results.forEach(brand => {
+                    var option = document.createElement('option');
+                    option.value = brand.Make;
+                    option.text = brand.Make;
+                    brandSelect.appendChild(option);
+					
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching data from the API:', error);
+            });
+    });
+</script>
+<script>
+    // Function to fetch Vehicle ID
+    modelSelect.addEventListener('change', function() {
+        // Get selected values from the dropdowns
+        var modelYear = document.getElementById('yearSelect').value;
+        var make = document.getElementById('brandSelect').value;
+        var model = document.getElementById('modelSelect').value;
+
+        // API endpoint
+        var apiUrl = `https://api.nhtsa.gov/SafetyRatings/modelyear/${modelYear}/make/${make}/model/${model}`;
+
+        // Make a GET request to the API
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                // Check if Results array exists and has at least one item
+                if (data.Results && data.Results.length > 0) {
+                    // Get the Vehicle ID from the first item in the Results array
+                    var vehicleId = data.Results[0].VehicleId;
+
+                    // Display the Vehicle ID in the input
+                    document.getElementById('vehicleId').value = vehicleId;
+                } else {
+                    alert('No data available for the selected criteria.');
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching data from the API:', error);
+            });
+    });
+</script>
+<script>
+    // Function to fetch and display data
+    function fetchAndDisplayData() {
+        // Vehicle ID
+		result.style.display = 'block'
+		var Vehicleid = document.getElementById('vehicleId').value;
+
+        // API endpoint
+        var apiUrl = `https://api.nhtsa.gov/SafetyRatings/VehicleId/${Vehicleid}`;
+
+        // Make a GET request to the API
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                // Check if Results array exists and has at least one item
+                if (data.Results && data.Results.length > 0) {
+                    // Get values from the first item in the Results array
+					var VehiclePicture = data.Results[0].VehiclePicture;
+                    var model = data.Results[0].Model;
+                    var year = data.Results[0].ModelYear;
+					var make = data.Results[0].Make;
+					var OverallRating = data.Results[0].OverallRating;
+					var OverallFrontCrashRating = data.Results[0].OverallFrontCrashRating;
+					var FrontCrashDriversideRating = data.Results[0].FrontCrashDriversideRating;
+					var FrontCrashPassengersideRating = data.Results[0].FrontCrashPassengersideRating;
+					var OverallSideCrashRating = data.Results[0].OverallSideCrashRating;
+					var SideCrashDriversideRating = data.Results[0].SideCrashDriversideRating;
+					var SideCrashPassengersideRating = data.Results[0].SideCrashPassengersideRating;
+					var RolloverRating = data.Results[0].RolloverRating;
+					var RolloverRating2 = data.Results[0].RolloverRating2;
+					var RolloverPossibility = data.Results[0].RolloverPossibility;
+					var RolloverPossibility2 = data.Results[0].RolloverPossibility2;
+					var dynamicTipResult = data.Results[0].dynamicTipResult;
+					var SidePoleCrashRating = data.Results[0].SidePoleCrashRating;
+					var NHTSAElectronicStabilityControl = data.Results[0].NHTSAElectronicStabilityControl;
+					var NHTSAForwardCollisionWarning = data.Results[0].NHTSAForwardCollisionWarning;
+					var NHTSALaneDepartureWarning = data.Results[0].NHTSALaneDepartureWarning;
+					var ComplaintsCount = data.Results[0].ComplaintsCount;
+					var RecallsCount = data.Results[0].RecallsCount;
+					var InvestigationCount = data.Results[0].InvestigationCount;
+
+
+					if (VehiclePicture) {
+						// Get the image element
+						var imageElement = document.getElementById('apiImage');
+
+						// Set the source of the image
+						imageElement.src = VehiclePicture;
+						imageElement.alt = 'Vehicle Image'; // Optional: Set the alt attribute for accessibility
+					} else {
+						alert('No image available from the API.');
+}
+					
+                    // Display values in the input fields
+					document.getElementById('make').textContent ="Make: " + make;
+					document.getElementById('year').textContent = "Year: " + year;
+					document.getElementById('model').textContent = "Model: " + model;
+					
+					document.getElementById('OverallRating').textContent = OverallRating + "/5";
+				//	document.getElementById('OverallFrontCrashRating').textContent = OverallFrontCrashRating + "/5"; do not uncomment. The code will break. dont know why...
+					document.getElementById('FrontCrashDriversideRating').textContent = FrontCrashDriversideRating + "/5";
+					document.getElementById('FrontCrashPassengersideRating').textContent = FrontCrashPassengersideRating + "/5";
+					document.getElementById('OverallSideCrashRating').textContent = OverallSideCrashRating + "/5";
+					document.getElementById('SideCrashDriversideRating').textContent = SideCrashDriversideRating + "/5";
+					document.getElementById('SideCrashPassengersideRating').textContent = SideCrashPassengersideRating + "/5";
+					document.getElementById('RolloverRating').textContent = RolloverRating + "/5";
+					document.getElementById('RolloverRating2').textContent = RolloverRating2 + "/5";
+					document.getElementById('RolloverPossibility').textContent = RolloverPossibility + "/1";
+					document.getElementById('RolloverPossibility2').textContent = RolloverPossibility2 + "/1";
+					document.getElementById('dynamicTipResult').textContent = dynamicTipResult;
+					document.getElementById('SidePoleCrashRating').textContent = SidePoleCrashRating + "/5";
+					document.getElementById('NHTSAElectronicStabilityControl').textContent = NHTSAElectronicStabilityControl;
+					document.getElementById('NHTSAForwardCollisionWarning').textContent = NHTSAForwardCollisionWarning;
+					document.getElementById('NHTSALaneDepartureWarning').textContent = NHTSALaneDepartureWarning;
+					document.getElementById('ComplaintsCount').textContent = ComplaintsCount;
+					document.getElementById('RecallsCount').textContent = RecallsCount;
+					document.getElementById('InvestigationCount').textContent = InvestigationCount;
+                } else {
+                    alert('No data available for the specified Vehicle ID.');
+                }
+				
+				// function to control the overall star rating
+				// Hide all stars
+				
+				for (let i = 1; i <= OverallRating; i++) {
+					document.getElementById('star' + i).classList.add('ratecolor');
+				}
+				// Show the stars based on the selected rating
+				for (let i = 1; i <= OverallRating; i++) {
+					document.getElementById('star' + i).classList.remove('ratecolor');
+				}
+				
+            })
+            .catch(error => {
+                console.error('Error fetching data from the API:', error);
+            });
+    }
+</script>
+</body>
+
+</html>
