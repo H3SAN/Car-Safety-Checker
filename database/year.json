@@ -1,8 +1,4 @@
 [
-{"type":"header","version":"5.2.1","comment":"Export to JSON plugin for PHPMyAdmin"},
-{"type":"database","name":"safety_ratings"},
-{"type":"table","name":"year","database":"safety_ratings","data":
-[
 {"id":"1","ModelYear":"2024","VehicleId":"0"},
 {"id":"2","ModelYear":"2023","VehicleId":"0"},
 {"id":"3","ModelYear":"2022","VehicleId":"0"},
@@ -38,6 +34,4 @@
 {"id":"33","ModelYear":"1992","VehicleId":"0"},
 {"id":"34","ModelYear":"1991","VehicleId":"0"},
 {"id":"35","ModelYear":"1990","VehicleId":"0"}
-]
-}
 ]
